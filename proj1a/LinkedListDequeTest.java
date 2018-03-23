@@ -1,24 +1,8 @@
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 /** Performs some basic linked list tests. */
 public class LinkedListDequeTest {
-	
-	/* Utility method for printing out empty checks. */
-	public static boolean checkEmpty(boolean expected, boolean actual) {
-		if (expected != actual) {
-			System.out.println("isEmpty() returned " + actual + ", but expected: " + expected);
-			return false;
-		}
-		return true;
-	}
-
-	/* Utility method for printing out empty checks. */
-	public static boolean checkSize(int expected, int actual) {
-		if (expected != actual) {
-			System.out.println("size() returned " + actual + ", but expected: " + expected);
-			return false;
-		}
-		return true;
-	}
-
 	/* Prints a nice message based on whether a test passed. 
 	 * The \n means newline. */
 	public static void printTestStatus(boolean passed) {
@@ -28,65 +12,57 @@ public class LinkedListDequeTest {
 			System.out.println("Test failed!\n");
 		}
 	}
-
+	@Test
 	/** Adds a few things to the list, checking isEmpty() and size() are correct, 
 	  * finally printing the results. 
 	  *
 	  * && is the "and" operation. */
-	public static void addIsEmptySizeTest() {
-		System.out.println("Running add/isEmpty/Size test.");
-		System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
-		/*
+	public void addIsEmptySizeTest() {
 		LinkedListDeque<String> lld1 = new LinkedListDeque<String>();
-
-		boolean passed = checkEmpty(true, lld1.isEmpty());
+		boolean expected = true;
+		boolean actual = lld1.isEmpty();
+		assertEquals(expected, actual);
 
 		lld1.addFirst("front");
-		
-		// The && operator is the same as "and" in Python.
-		// It's a binary operator that returns true if both arguments true, and false otherwise.
-		passed = checkSize(1, lld1.size()) && passed;
-		passed = checkEmpty(false, lld1.isEmpty()) && passed;
+		assertEquals(1, lld1.size());
+		assertEquals(false, lld1.isEmpty());
 
 		lld1.addLast("middle");
-		passed = checkSize(2, lld1.size()) && passed;
+		assertEquals(2, lld1.size());
 
 		lld1.addLast("back");
-		passed = checkSize(3, lld1.size()) && passed;
-
-		System.out.println("Printing out deque: ");
-		lld1.printDeque();
-
-		printTestStatus(passed);
-		*/
+		assertEquals(3, lld1.size());
 	}
 
+	@Test
 	/** Adds an item, then removes an item, and ensures that dll is empty afterwards. */
-	public static void addRemoveTest() {
+	public void addRemoveTest() {
 
-		System.out.println("Running add/remove test.");
-
-		System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
-		/*
 		LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
-		// should be empty 
-		boolean passed = checkEmpty(true, lld1.isEmpty());
-
 		lld1.addFirst(10);
-		// should not be empty 
-		passed = checkEmpty(false, lld1.isEmpty()) && passed;
 
-		lld1.removeFirst();
-		// should be empty 
-		passed = checkEmpty(true, lld1.isEmpty()) && passed;
+		int returnValue = lld1.removeFirst();
+		assertEquals(10, returnValue);
+		assertEquals(true, lld1.isEmpty());
 
-		printTestStatus(passed);
-		*/
+		lld1.addLast(20);
+		int value2 = lld1.removeLast();
+		assertEquals(20, value2);
+		assertEquals(true, lld1.isEmpty());
 	}
 
-	public static void main(String[] args) {
-		System.out.println("Running tests.\n");
-		addIsEmptySizeTest();
-		addRemoveTest();
+	@Test
+	/** Test get method */
+	public void getTest() {
+		LinkedListDeque<Integer> lld1 = new LinkedListDeque<>();
+		lld1.addFirst(10);
+		lld1.addFirst(20);
+		lld1.addFirst(30);
+
+		int actual1 = lld1.getRecursive(1);
+		int actual2 = lld1.getRecursive(2);
+
+		assertEquals(20, actual1);
+		assertEquals(10, actual2);
 	}
 } 
