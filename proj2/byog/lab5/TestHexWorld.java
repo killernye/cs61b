@@ -7,24 +7,38 @@ import static org.junit.Assert.*;
 
 public class TestHexWorld {
 
-    public static void main(String[] args) {
-        TERenderer ter = new TERenderer();
-        int width = 100;
-        int height = 100;
-        ter.initialize(width, height);
-        TETile[][] canvas = new TETile[width][height];
-        // fill the whole canvas with nothing
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y <  height; y++) {
-                canvas[x][y] = Tileset.NOTHING;
+    @Test
+    public void testTopRightNeighour() {
+        HexWorld.Position p = new HexWorld.Position(0, 0);
+        HexWorld.Position expected1 = new HexWorld.Position(3, 2);
+        HexWorld.Position actual1 = HexWorld.topRightNeighbor(p, 2);
+        assertEquals(0, expected1.compareTo(actual1));
+        HexWorld.Position expected2 = new HexWorld.Position(3, -2);
+        HexWorld.Position actual2 = HexWorld.bottomRightNeighbor(p, 2);
+        assertEquals(0, expected2.compareTo(actual2));
+    }
+
+
+    public static void fillWithNothing(TETile[][] tiles) {
+        int height = tiles[0].length;
+        int width = tiles.length;
+        for (int x = 0; x < width; x += 1) {
+            for (int y = 0; y < height; y += 1) {
+                tiles[x][y] = Tileset.NOTHING;
             }
         }
-        TETile t = HexWorld.randomTile();
-        HexWorld.Position p = new HexWorld.Position(50, 50);
-        HexWorld.addHexagon(canvas, p, 25, t);
-//        HexWorld.fillWithUnitHexagon(unitHexagon, SIZE, SIZE - 1, 0);
-//        HexWorld.drawLowerHalfHexagon(unitHexagon, SIZE, SIZE - 1, 0);
-//        HexWorld.drawUpperHalfHexagon(unitHexagon, SIZE, 0, SIZE);
-        ter.renderFrame(canvas);
+    }
+
+    public static void main(String[] args) {
+//        int width = 60;
+//        int height = 50;
+//        TERenderer ter = new TERenderer();
+//        ter.initialize(width, height);
+//        TETile[][] canvas = new TETile[width][height];
+//        fillWithNothing(canvas);
+//        HexWorld.Position topP = new HexWorld.Position(10, 30);
+//        HexWorld.drawRandomVerticalHexes(canvas, topP, 3, 4);
+//        ter.renderFrame(canvas);
+        HexWorld.drawHexagonWorld(5);
     }
 }

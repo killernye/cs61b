@@ -16,7 +16,8 @@ public class HexWorld {
 //    private static final int HEIGHT = 100;
     private static final Random RANDOM = new Random(939);
 
-    public static class Position {
+    /** A nested class provide coordinate position information. */
+    public static class Position implements Comparable<Position> {
         private int _x;
         private int _y;
 
@@ -32,6 +33,123 @@ public class HexWorld {
         public int getY() {
             return _y;
         }
+
+        public int compareTo(Position p) {
+            if (this.getY() == p.getY() && this.getX() == p.getX()) {
+                return 0;
+            } else {
+                return 2;
+            }
+        }
+    }
+
+    // topRightNeighbor(current hexagon) and bottomRightNeighbor() which computes
+    // the current hexagon's neighbor's bottom-left Position.
+
+    // the World consists of 5 columns of 3, 4, 5, 4 and 3 hexagons, respectively
+
+    // drawRandomVerticalHexes that draws a column of N hexes, each one with a
+    // random biome
+
+    // main method that calls drawRandomVerticalHexes five times, one for each of
+    // the five columns of the world, consisting of 3, 4, 5, 4 and 3 hexagons. To
+    // figure out the starting position for the top hex of each column, try to use
+    // the topRightNeighbor or bottomRightNeighbor on the old top, as appropriate.
+
+    /**
+     * Draw a Hexagon World consisting of 19 random Hexagons.
+     * @param s The size of each unit hexagon
+     */
+    public static void drawHexagonWorld(int s) {
+        // set the size of the canvas
+        int width = 11*s - 6;
+        int height = 10*s;
+
+        // initialize the engine
+        TERenderer ter = new TERenderer();
+        ter.initialize(width, height);
+        TETile[][] canvas = new TETile[width][height];
+        fillWithNothing(canvas);
+
+        // set the parameters for the big hexagon
+        int[] hexes = new int[]{3, 4, 5, 4, 3};
+        Position p = new Position(s-1, height - 4*s); // start point
+
+        // iterate over five columns of hexes
+        for(int i = 0; i < 5; i++) {
+            Position nextP;
+            if (i < 2) {
+                nextP = topRightNeighbor(p, s);
+            } else {
+                nextP = bottomRightNeighbor(p, s);
+            }
+            drawRandomVerticalHexes(canvas, p, hexes[i], s);
+            p = nextP;
+        }
+
+        // draw the canvas to screen
+        ter.renderFrame(canvas);
+    }
+
+    /**
+     * Initialize a canvas with nothing.
+     * @param tiles the canvas
+     */
+    public static void fillWithNothing(TETile[][] tiles) {
+        int height = tiles[0].length;
+        int width = tiles.length;
+        for (int x = 0; x < width; x += 1) {
+            for (int y = 0; y < height; y += 1) {
+                tiles[x][y] = Tileset.NOTHING;
+            }
+        }
+    }
+
+    /**
+     * Draws a column of N hexes, each one with a random biome.
+     * @param p left-bottom position of the top hexagon of the column
+     * @param n the size of the column
+     * @param s the size of each hexagon
+     */
+    public static void drawRandomVerticalHexes(TETile[][] canvas, Position p, int n, int s) {
+        for (int i = 0; i < n; i++) {
+            addHexagon(canvas, p, s, randomTile());
+            p = bottomNeighbor(p, s);
+        }
+    }
+
+    /**
+     * Computes the left-bottom position of the bottom hexagon of the current one
+     * @param p the left-bottom position of the current hexagon
+     * @param s the size of the unit hexagon
+     * @return
+     */
+    public static Position bottomNeighbor(Position p, int s){
+        return new Position(p.getX(), p.getY() - 2*s);
+    }
+
+    /**
+     * Computes the bottom-left position of the current hexagon's topRight neighbor.
+     * @param currentP the bottom-left position of the current hexagon
+     * @param s the size of each unit hexagon
+     * @return the bottom-left position of the top right hexagon
+     */
+    public static Position topRightNeighbor(Position currentP, int s) {
+        int x = currentP.getX() + 2 * s - 1;
+        int y = currentP.getY() + s;
+        return new Position(x, y);
+    }
+
+    /**
+     * Computes the bottom-left position of the current hexagon's BottomRight neighbor
+     * @param currentP the bottom-left position of the current hexagon
+     * @param s the size of unit Hexagon
+     * @return the bottom-left position of the bottom right hexagon
+     */
+    public static Position bottomRightNeighbor(Position currentP, int s) {
+        int x =currentP.getX() + 2 * s - 1;
+        int y = currentP.getY() - s;
+        return new Position(x, y);
     }
 
     /**
@@ -121,13 +239,14 @@ public class HexWorld {
 
     /** Random Tile generator! Pick the following tile with equal chance.*/
     public static TETile randomTile() {
-        int tileNum = RANDOM.nextInt(5);
+        int tileNum = RANDOM.nextInt(6);
         switch (tileNum) {
             case 0: return Tileset.TREE;
             case 1: return Tileset.WATER;
             case 2: return Tileset.FLOWER;
             case 3: return Tileset.GRASS;
             case 4: return Tileset.MOUNTAIN;
+            case 5: return Tileset.WALL;
             default: return Tileset.NOTHING;
         }
     }
