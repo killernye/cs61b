@@ -2,6 +2,9 @@ package byog.Core;
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
+import edu.princeton.cs.introcs.StdDraw;
+
+import java.awt.*;
 
 public class MapVisualTest {
 
@@ -19,10 +22,16 @@ public class MapVisualTest {
     public static void main(String[] args) {
         TERenderer ter = new TERenderer();
         MapGeneratorParameters mgp = MapGeneratorParameters.defaultParameters();
+
         ter.initialize(mgp.width, mgp.height);
-        ter.renderFrame(MapGenerator.generate(mgp));
-//        WorldState ws = MapGenerator.generate(mgp);
-//        ter.renderFrame(ws.terrainGrid());
+
+
+//        Generator g = new Generator(mgp);
+//        WorldState ws = g.generate();
+//        TETile[][] canvas = ws.terrainGrid();
+//        ter.renderFrame(canvas);
+//        StdDraw.setPenColor(Color.white);
+//        StdDraw.textLeft(1, mgp.height - 1, "hello!");
 
     }
 }

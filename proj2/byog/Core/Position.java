@@ -24,6 +24,13 @@ public class Position {
         return false;
     }
 
+    public Boolean outOfBorder() {
+        if (x < 0 || y < 0) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Computes the position which is xOffset units horizontally away from the current P.
      * @param xOffset horizontal relative distance from the current P.

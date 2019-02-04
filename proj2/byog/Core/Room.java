@@ -19,7 +19,7 @@ public class Room {
     TETile wTile;
     TETile fTile;
 
-    public Room(int w, int h, Position p, TETile wT, TETile fT) {
+    Room(int w, int h, Position p, TETile wT, TETile fT) {
         width = w;
         height = h;
         position = p;
@@ -28,10 +28,12 @@ public class Room {
     }
 
     /** Check if the room out of the border of the world. */
-    public Boolean outOfBorder(int maxX, int maxY) {
-        if (position.x + width - 1 > maxX || position.x - width + 1 < 0) {
+    public Boolean outOfBorder(MapGeneratorParameters mgp) {
+        if (position.x + width > mgp.width ) {
             return true;
-        } else if (position.y + height - 1> maxY || position.y - height + 1 < 0) {
+        } else if (position.y + height > mgp.height) {
+            return true;
+        } else if (position.outOfBorder()){
             return true;
         } else {
             return false;
